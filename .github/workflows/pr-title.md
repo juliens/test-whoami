@@ -1,8 +1,8 @@
 ---
 on:
-  pull_request:
+  pull_request_target:
     types: [labeled]
-    names: [status/2-needs-review]
+
   # Deterministic gate: decide who "owns" the current title before the agent runs.
   # The title is left alone when the last person who set it is a maintainer
   # (repository write/maintain/admin permission) or a bot (i.e. this workflow),
@@ -59,12 +59,15 @@ on:
             ;;
         esac
 
+
+
+
 jobs:
   pre-activation:
     outputs:
       should_run: ${{ steps.title_owner.outputs.should_run }}
 
-if: needs.pre_activation.outputs.should_run == 'true'
+if: needs.pre_activation.outputs.should_run == 'true' && github.event.label.name == 'status/2-needs-review'
 
 permissions:
   contents: read
@@ -101,7 +104,7 @@ max-turns: 100
 imports:
 - shared/pr-title.md
 
-source: juliens/ai/workflows/traefik.pr-title.md@14374a62281a32e1699127723cb6a2234962d10c
+source: juliens/ai/workflows/traefik.pr-title.md@0be0a204f78b7a88f4c360f069279d1ed908bb3a
 ---
 
 Nothing
